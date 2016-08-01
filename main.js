@@ -1,7 +1,7 @@
 (function (doc, nav) {
-  "use strict";
 
-  var video, greenvideo, width, height, context, canvas;
+
+  var video, greenvideo, width, height, context, canvas, i;
 
   function initialize() {
 
@@ -13,9 +13,18 @@
     width = video.width;
     height = video.height;
 
+  // The replacement image
+
+  i = document.getElementById( 'replaceimage' );
+  var rImage = i.getContext( '2d' );
+  rWidth = rImage.width;
+  rHeight = rImage.height;
+
+  var replaceImageData = rImage.createImageData( rWidth, rHeight );
+
     // The target canvas.
      canvas = doc.getElementById("c");
-    context = canvas.getContext("2d");
+     context = canvas.getContext("2d");
 
     nav.getUserMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
