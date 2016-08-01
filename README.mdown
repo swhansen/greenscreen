@@ -1,0 +1,10 @@
+# Javascript Green Screen  #
+
+Experimental code to take a live video stream with getUserMedia, grab images and
+process green screen(replacing green with background image), recapture
+as video to stream with webRTC
+
+* getUserMedia
+* putImageData
+* getImageData
+* [captureStream](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/captureStream)
