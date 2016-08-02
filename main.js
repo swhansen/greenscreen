@@ -57,7 +57,7 @@
     // Wait for the next frame.
 
     requestAnimationFrame( draw );
-    createGreenStream( frame );
+   // createGreenStream( frame );
   }
 
   function createGreenStream() {
@@ -92,7 +92,7 @@
       // ... and check if we have a somewhat green pixel.
 
       if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
-      //  data[j + 3] = 0;
+     //   data[j + 3] = 0;
 
    //    data[j] = 225
    //    data[j + 1] = 100
