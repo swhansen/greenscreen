@@ -1,7 +1,7 @@
 (function (doc, nav) {
 
 
-  var video, greenvideo, width, height, context, canvas, i;
+  var video, greenvideo, width, height, context, canvas, i, replaceImageData;
 
   function initialize() {
 
@@ -15,14 +15,13 @@
 
   // The replacement image
 
-  i = document.getElementById( 'replaceimage' );
-  var rImage = i.getContext( '2d' );
-  rWidth = rImage.width;
-  rHeight = rImage.height;
+    i = document.getElementById( 'replaceimage' );
+    var rImage = i.getContext( '2d' );
+    var rWidth = parseInt( i.getAttribute("width"));
+    var rHeight = parseInt( i.getAttribute("height"));
+     replaceImageData = rImage.createImageData( rWidth, rHeight );
 
-  var replaceImageData = rImage.createImageData( rWidth, rHeight );
-
-    // The target canvas.
+  // The target canvas.
      canvas = doc.getElementById("c");
      context = canvas.getContext("2d");
 
@@ -58,7 +57,7 @@
     // Wait for the next frame.
 
     requestAnimationFrame( draw );
-   // createGreenStream( frame );
+    createGreenStream( frame );
   }
 
   function createGreenStream() {
@@ -86,10 +85,22 @@
       var hsl = rgb2hsl(data[j], data[j + 1], data[j + 2]);
       var h = hsl[0], s = hsl[1], l = hsl[2];
 
+      var replacehsl = rgb2hsl( replaceImageData[j], replaceImageData[j + 1], replaceImageData[j + 2]);
+
+      var rh = replacehsl[0], rs = replacehsl[1], rl = replacehsl[2];
+
       // ... and check if we have a somewhat green pixel.
 
       if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
-        data[j + 3] = 0;
+      //  data[j + 3] = 0;
+
+   //    data[j] = 225
+   //    data[j + 1] = 100
+   //    data[j + 2] = 50
+   //    data[j + 3] = 1;
+
+   //    return data;
+
       }
     }
   }
