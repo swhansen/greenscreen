@@ -24,8 +24,33 @@ var rCanvas, rContext;
 
     i = document.getElementById( 'replaceimage' );
 
-rCanvas = document.getElementById( 'foocanvas' );
-var rctx = rCanvas.getContext( '2d' );
+//rCanvas = document.getElementById( 'foocanvas' );
+//var rctx = rCanvas.getContext( '2d' );
+
+
+//var ccc = doc.getElementById('foocanvas');
+var ccc = document.createElement('canvas');
+var cvs=ccc.getContext("2d");
+cvs.width = i.width;
+cvs.height = i.height;
+cvs.drawImage(i, 10, 10 );
+//cvs.getContext('2d').drawImage(i, 0, 0, i.width, i.height);
+
+var pixelData = cvs.getContext('2d').getImageData( 10, 10, 50, 50 )
+var pix = pixelData.data
+
+for (var ii = 0, n = pix.length; i < n; i += 4) {
+    pix[ii  ] = 255 - pix[ii  ]; // red
+    pix[ii+1] = 255 - pix[ii+1]; // green
+    pix[ii+2] = 255 - pix[ii+2]; // blue
+    // i+3 is alpha (the fourth element)
+}
+
+console.log( pix );
+
+
+
+
 
 ////rCanvas = doc.getElementById("foocanvas");
 //rContext = rCanvas.getContext("2d");
