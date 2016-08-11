@@ -28,7 +28,7 @@ var rCanvas, rContext
 //rContext = rCanvas.getContext("2d");
 
 ////rCanvas = doc.getElementById("foocanvas");
-rContext = rCanvas.getContext("2d");
+//rContext = rCanvas.getContext("2d");
 //
 var rwidth = i.width;
 var rheight = i.height;
