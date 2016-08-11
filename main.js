@@ -25,7 +25,7 @@ var rCanvas, rContext;
     i = document.getElementById( 'replaceimage' );
 
 rCanvas = document.getElementById( 'foocanvas' );
-rContext = rCanvas.getContext("2d");
+var rctx = rCanvas.getContext( '2d' );
 
 ////rCanvas = doc.getElementById("foocanvas");
 //rContext = rCanvas.getContext("2d");
