@@ -4,7 +4,7 @@
   var video, videog, greenvideo, width, height, context, canvas, i, replaceImageData, frame;
 
 
-var rCanvas, rContext
+var rCanvas, rContext;
 
   var imageObj;
 
@@ -24,7 +24,7 @@ var rCanvas, rContext
 
     i = document.getElementById( 'replaceimage' );
 
-var rCanvas = doc.getElementById( 'rcanvas' );
+rCanvas = doc.getElementById( 'rcanvas' );
 rContext = rCanvas.getContext("2d");
 
 ////rCanvas = doc.getElementById("foocanvas");
@@ -33,7 +33,7 @@ rContext = rCanvas.getContext("2d");
 var rwidth = i.width;
 var rheight = i.height;
 
-rContext.getContext('2d').drawImage(i, 0, 0, i.width, i.height);
+//rContext.getContext('2d').drawImage(i, 0, 0, i.width, i.height);
 
 
 
