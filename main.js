@@ -1,7 +1,12 @@
 (function (doc, nav) {
 
 
-  var video, greenvideo, width, height, context, canvas, i, replaceImageData;
+  var video, videog, greenvideo, width, height, context, canvas, i, replaceImageData, frame;
+
+
+var rCanvas, rContext
+
+  var imageObj;
 
   function initialize() {
 
@@ -15,13 +20,35 @@
 
   // The replacement image
 
+// create the replacement image canvas
+
     i = document.getElementById( 'replaceimage' );
-    var rImage = i.getContext( '2d' );
+
+//var rCanvas = document.getElementById( 'rcanvas' );
+//rContext = rCanvas.getContext("2d");
+
+////rCanvas = doc.getElementById("foocanvas");
+rContext = rCanvas.getContext("2d");
+//
+var rwidth = i.width;
+var rheight = i.height;
+
+rContext.getContext('2d').drawImage(i, 0, 0, i.width, i.height);
+
+
+
+
+    var rImagectx = i.getContext( '2d' );
     var rWidth = parseInt( i.getAttribute("width"));
     var rHeight = parseInt( i.getAttribute("height"));
-     replaceImageData = rImage.createImageData( rWidth, rHeight );
+    console.log( 'rImage:', rWidth, rHeight );
+
+
+    replaceImageData = rImagectx.getImageData( 0, 0, rWidth, rHeight );
+
 
   // The target canvas.
+
      canvas = doc.getElementById("c");
      context = canvas.getContext("2d");
 
@@ -34,24 +61,30 @@
 
     nav.getUserMedia({video: true}, startStream, function() {});
 
-    createGreenStream();
+    //createGreenStream();
   }
 
-  function startStream(stream) {
+  function startStream( stream ) {
     video.src = URL.createObjectURL( stream );
+    greenvideo.src = URL.createObjectURL( stream );
+
+
     video.play();
 
     // Ready! Let's start drawing.
-
+    createGreenStream();
     requestAnimationFrame( draw );
   }
 
   function draw() {
-    var frame = readFrame();
+     frame = readFrame();
 
     if ( frame ) {
-      replaceGreen( frame.data );
+      replaceGreen( frame );
+
+
       context.putImageData( frame, 0, 0 );
+
     }
 
     // Wait for the next frame.
@@ -63,6 +96,10 @@
   function createGreenStream() {
     var stream = canvas.captureStream( 25 );
     greenvideo.src = URL.createObjectURL( stream );
+
+
+
+
     greenvideo.play();
   }
 
@@ -77,29 +114,33 @@
     return context.getImageData( 0, 0, width, height );
   }
 
-  function replaceGreen( data ) {
-    var len = data.length;
+  function replaceGreen( frame ) {
+
+    var len = frame.data.length;
 
     for (var i = 0, j = 0; j < len; i++, j += 4) {
+
       // Convert from RGB to HSL...
-      var hsl = rgb2hsl(data[j], data[j + 1], data[j + 2]);
+
+      var hsl = rgb2hsl(frame.data[j], frame.data[j + 1], frame.data[j + 2]);
       var h = hsl[0], s = hsl[1], l = hsl[2];
-
-      var replacehsl = rgb2hsl( replaceImageData[j], replaceImageData[j + 1], replaceImageData[j + 2]);
-
-      var rh = replacehsl[0], rs = replacehsl[1], rl = replacehsl[2];
 
       // ... and check if we have a somewhat green pixel.
 
       if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
-     //   data[j + 3] = 0;
 
-   //    data[j] = 225
-   //    data[j + 1] = 100
-   //    data[j + 2] = 50
-   //    data[j + 3] = 1;
+     // frame.data[j] =     replaceImageData[ j ];
+     // frame.data[j + 1] = replaceImageData[ j + 1];
+     // frame.data[j + 2] = replaceImageData[j + 2];
+     // frame.data[j + 3] = 0;
+     //console.log( 'replaceImageData-r:', frame.data[j] )
 
-   //    return data;
+       frame.data[j] = 255;
+       frame.data[j + 1] = 0;
+       frame.data[j + 2] =  0;
+       frame.data[j + 3] = 255;
+
+      // return frame;
 
       }
     }
