@@ -139,23 +139,25 @@ console.log( pix[0], pix[1], pix[2], pix[3] );
 
       if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
 
-     // frame.data[j] =     replaceImageData[ j ];
-     // frame.data[j + 1] = replaceImageData[ j + 1];
-     // frame.data[j + 2] = replaceImageData[j + 2];
-     // frame.data[j + 3] = 0;
-     //console.log( 'replaceImageData-r:', frame.data[j] )
-
-
 
       var repl =  [ pix[j], pix[j + 1], pix[j + 2] ];
-
 
       var r = repl[0], g = repl[1], b = repl[2];
 
 
-      frame.data[j] = r;
-       frame.data[j + 1] = g;
-       frame.data[i + 2] = b;
+   //  frame.data[j] = r;
+   //  frame.data[j + 1] = g;
+   //  frame.data[i + 2] = b;
+
+   if ( i === 1000 ) {
+
+    console.log( repl );
+   }
+
+
+       frame.data[j] = pix[0];
+       frame.data[j + 1] = pix[1];
+       frame.data[i + 2] = pix[2];
      //  frame.data[i + 3] = b;
       // frame.data[i + 3] = 255;
 

@@ -5,15 +5,15 @@
     <title>Demo: live green screen with getUserMedia()</title>
     <meta content="Tim Taubert" name="author">
     <link href="main.css" rel="stylesheet" type="text/css">
-    <script src='cs101.js'></script>
-    <script src='SimpleImage.js'></script>
     <script src="main.js"></script>
   </head>
 
   <body>
-    <video id="v" width="820" height="640"></video>
+    <body>
+    <video id="v" width="820" height="640" style="display:none" ></video>
+    <canvas id="c" width="820" height="640"></canvas>
     <video id="greenv" width="820" height="640"></video>
-    <canvas id="c" width="820" height="640" ></canvas>
-    <canvas id="replacecanvas"  alt="replace-image" width="820" height="640"></canvas>
+  </body>
+
   </body>
 </html>
