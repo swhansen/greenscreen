@@ -46,6 +46,7 @@ var rCanvas, rContext;
 //}
 
 console.log( pix[134], pix[135], pix[136], pix[137] );
+console.log( pix[0], pix[1], pix[2], pix[3] );
 
 //    var rImagectx = i.getContext( '2d' );
 //    var rWidth = parseInt( i.getAttribute("width"));
