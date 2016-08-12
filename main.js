@@ -3,10 +3,9 @@
 
   var video, videog, greenvideo, width, height, context, canvas, i, replaceImageData, frame;
 
-
 var rCanvas, rContext;
 
-  var imageObj;
+  var pix;
 
   function initialize() {
 
@@ -22,54 +21,39 @@ var rCanvas, rContext;
 
 // create the replacement image canvas
 
-    i = document.getElementById( 'replaceimage' );
+ // i = document.getElementById( 'replaceimage' );
+  var ii = new Image();
+  ii.src = 'bb.png';
 
-//rCanvas = document.getElementById( 'foocanvas' );
-//var rctx = rCanvas.getContext( '2d' );
+  var cvs = document.createElement('canvas');
+  var ctx = cvs.getContext( '2d');
 
+  ii.onload = function() {
+    ctx.drawImage(ii, 0, 0);
+    ii.style.display = 'none';
+  };
 
-//var ccc = doc.getElementById('foocanvas');
-var ccc = document.createElement('canvas');
-var cvs=ccc.getContext("2d");
-cvs.width = i.width;
-cvs.height = i.height;
-cvs.drawImage(i, 10, 10 );
-//cvs.getContext('2d').drawImage(i, 0, 0, i.width, i.height);
+  ctx.drawImage(ii, 0, 0 );
 
-var pixelData = cvs.getContext('2d').getImageData( 10, 10, 50, 50 )
-var pix = pixelData.data
+  var pixelData = ctx.getImageData( 0, 0, cvs.width, cvs.height);
+  pix = pixelData.data
 
-for (var ii = 0, n = pix.length; i < n; i += 4) {
-    pix[ii  ] = 255 - pix[ii  ]; // red
-    pix[ii+1] = 255 - pix[ii+1]; // green
-    pix[ii+2] = 255 - pix[ii+2]; // blue
-    // i+3 is alpha (the fourth element)
-}
+//for (var ii = 0, n = pix.length; i < n; i += 4) {
+//    pix[ii  ] = 255 - pix[ii  ]; // red
+//    pix[ii+1] = 255 - pix[ii+1]; // green
+//    pix[ii+2] = 255 - pix[ii+2]; // blue
+//    // i+3 is alpha (the fourth element)
+//}
 
-console.log( pix );
+console.log( pix[134], pix[135], pix[136], pix[137] );
 
-
-
-
-
-////rCanvas = doc.getElementById("foocanvas");
-//rContext = rCanvas.getContext("2d");
-//
-var rwidth = i.width;
-var rheight = i.height;
-
-//rContext.getContext('2d').drawImage(i, 0, 0, i.width, i.height);
+//    var rImagectx = i.getContext( '2d' );
+//    var rWidth = parseInt( i.getAttribute("width"));
+//    var rHeight = parseInt( i.getAttribute("height"));
+//    console.log( 'rImage:', rWidth, rHeight );
 
 
-
-
-    var rImagectx = i.getContext( '2d' );
-    var rWidth = parseInt( i.getAttribute("width"));
-    var rHeight = parseInt( i.getAttribute("height"));
-    console.log( 'rImage:', rWidth, rHeight );
-
-
-    replaceImageData = rImagectx.getImageData( 0, 0, rWidth, rHeight );
+ //   replaceImageData = rImagectx.getImageData( 0, 0, rWidth, rHeight );
 
 
   // The target canvas.
@@ -143,7 +127,7 @@ var rheight = i.height;
 
     var len = frame.data.length;
 
-    for (var i = 0, j = 0; j < len; i++, j += 4) {
+    for ( var i = 0, j = 0; j < len; i++, j += 4 ) {
 
       // Convert from RGB to HSL...
 
@@ -160,10 +144,19 @@ var rheight = i.height;
      // frame.data[j + 3] = 0;
      //console.log( 'replaceImageData-r:', frame.data[j] )
 
-       frame.data[j] = 255;
-       frame.data[j + 1] = 0;
-       frame.data[j + 2] =  0;
-       frame.data[j + 3] = 255;
+
+
+      var repl =  [ pix[j], pix[j + 1], pix[j + 2] ];
+
+
+      var r = repl[0], g = repl[1], b = repl[2];
+
+
+      frame.data[j] = r;
+       frame.data[j + 1] = g;
+       frame.data[i + 2] = b;
+     //  frame.data[i + 3] = b;
+      // frame.data[i + 3] = 255;
 
       // return frame;
 
