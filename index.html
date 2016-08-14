@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Demo: live green screen with getUserMedia()</title>
-    <meta content="Tim Taubert" name="author">
+    <meta content="Steve Hansen" name="author">
     <link href="main.css" rel="stylesheet" type="text/css">
     <script src="main.js"></script>
   </head>
@@ -12,8 +12,9 @@
     <body>
     <video id="v" width="820" height="640" style="display:none" ></video>
     <canvas id="c" width="820" height="640"></canvas>
+    <canvas id="backcanvas" width="820" height="640" style="display:none" ></canvas>
     <video id="greenv" width="820" height="640"></video>
+    <img id='bb' src='bb.jpg' width="820" height="640" style="display:none">
   </body>
-
   </body>
 </html>

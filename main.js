@@ -1,66 +1,32 @@
 (function (doc, nav) {
 
-
-  var video, videog, greenvideo, width, height, context, canvas, i, replaceImageData, frame;
-
-var rCanvas, rContext;
-
-  var pix;
+  var video, outputVideo, context, scratchCanvas, frame, backgroundData;
 
   function initialize() {
 
-    // The source video.
+  // The source video.
 
     video = doc.getElementById("v");
-    greenvideo = doc.getElementById("greenv");
-
-    width = video.width;
-    height = video.height;
+    outputVideo = doc.getElementById("greenv");
 
   // The replacement image
 
-// create the replacement image canvas
+    var backgroundCanvas = doc.getElementById("backcanvas");
+    var backgroundContext = backgroundCanvas.getContext("2d");
+    var img = document.getElementById("bb");
+    backgroundContext.drawImage(img, 300, 300, 1000, 1000, 0, 0, 1000,1000);
 
- // i = document.getElementById( 'replaceimage' );
-  var ii = new Image();
-  ii.src = 'bb.png';
+    backgroundData = backgroundContext.getImageData( 0, 0, 820, 640).data;
 
-  var cvs = document.createElement('canvas');
-  var ctx = cvs.getContext( '2d');
+ //var pixLength = backgroundData.length / 4;
+ //console.log( 'pixLength:', pixLength );
+ //console.log( backgroundData[0], backgroundData[1], backgroundData[2], backgroundData[3] );
+ //console.log( backgroundData[2000], backgroundData[2001], backgroundData[2002], backgroundData[2003] );
 
-  ii.onload = function() {
-    ctx.drawImage(ii, 0, 0);
-    ii.style.display = 'none';
-  };
+  // The working canvas.
 
-  ctx.drawImage(ii, 0, 0 );
-
-  var pixelData = ctx.getImageData( 0, 0, cvs.width, cvs.height);
-  pix = pixelData.data
-
-//for (var ii = 0, n = pix.length; i < n; i += 4) {
-//    pix[ii  ] = 255 - pix[ii  ]; // red
-//    pix[ii+1] = 255 - pix[ii+1]; // green
-//    pix[ii+2] = 255 - pix[ii+2]; // blue
-//    // i+3 is alpha (the fourth element)
-//}
-
-console.log( pix[134], pix[135], pix[136], pix[137] );
-console.log( pix[0], pix[1], pix[2], pix[3] );
-
-//    var rImagectx = i.getContext( '2d' );
-//    var rWidth = parseInt( i.getAttribute("width"));
-//    var rHeight = parseInt( i.getAttribute("height"));
-//    console.log( 'rImage:', rWidth, rHeight );
-
-
- //   replaceImageData = rImagectx.getImageData( 0, 0, rWidth, rHeight );
-
-
-  // The target canvas.
-
-     canvas = doc.getElementById("c");
-     context = canvas.getContext("2d");
+    scratchCanvas = doc.getElementById("c");
+    context = scratchCanvas.getContext("2d");
 
     nav.getUserMedia = ( navigator.getUserMedia ||
                        navigator.webkitGetUserMedia ||
@@ -70,58 +36,45 @@ console.log( pix[0], pix[1], pix[2], pix[3] );
     // Get the webcam's stream.
 
     nav.getUserMedia({video: true}, startStream, function() {});
-
-    //createGreenStream();
   }
 
   function startStream( stream ) {
     video.src = URL.createObjectURL( stream );
-    greenvideo.src = URL.createObjectURL( stream );
-
-
     video.play();
 
-    // Ready! Let's start drawing.
     createGreenStream();
+
     requestAnimationFrame( draw );
   }
 
   function draw() {
-     frame = readFrame();
+    frame = readFrame();
 
     if ( frame ) {
       replaceGreen( frame );
-
-
       context.putImageData( frame, 0, 0 );
-
     }
 
-    // Wait for the next frame.
-
     requestAnimationFrame( draw );
-   // createGreenStream( frame );
   }
 
   function createGreenStream() {
-    var stream = canvas.captureStream( 25 );
-    greenvideo.src = URL.createObjectURL( stream );
 
+// build the processed output video stream
 
-
-
-    greenvideo.play();
+    var outputStream = scratchCanvas.captureStream( 25 );
+    outputVideo.src = URL.createObjectURL( outputStream );
+    outputVideo.play();
   }
 
   function readFrame() {
     try {
-      context.drawImage( video, 0, 0, width, height );
+      context.drawImage( video, 0, 0, video.width, video.height );
     } catch (e) {
       // The video may not be ready, yet.
       return null;
     }
-
-    return context.getImageData( 0, 0, width, height );
+    return context.getImageData( 0, 0, video.width, video.height );
   }
 
   function replaceGreen( frame ) {
@@ -130,39 +83,21 @@ console.log( pix[0], pix[1], pix[2], pix[3] );
 
     for ( var i = 0, j = 0; j < len; i++, j += 4 ) {
 
-      // Convert from RGB to HSL...
+    // Convert from RGB to HSL...
 
       var hsl = rgb2hsl(frame.data[j], frame.data[j + 1], frame.data[j + 2]);
       var h = hsl[0], s = hsl[1], l = hsl[2];
 
-      // ... and check if we have a somewhat green pixel.
+    // ... and check if we have a somewhat green background
 
       if (h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75) {
 
+      //.. and replace with the background pixels
 
-      var repl =  [ pix[j], pix[j + 1], pix[j + 2] ];
-
-      var r = repl[0], g = repl[1], b = repl[2];
-
-
-   //  frame.data[j] = r;
-   //  frame.data[j + 1] = g;
-   //  frame.data[i + 2] = b;
-
-   if ( i === 1000 ) {
-
-    console.log( repl );
-   }
-
-
-       frame.data[j] = pix[0];
-       frame.data[j + 1] = pix[1];
-       frame.data[i + 2] = pix[2];
-     //  frame.data[i + 3] = b;
-      // frame.data[i + 3] = 255;
-
-      // return frame;
-
+      frame.data[j] = backgroundData[ j ];
+      frame.data[j + 1] = backgroundData[ j + 1 ];
+      frame.data[j + 2] = backgroundData[ j + 2 ]
+      frame.data[j + 3] = 255
       }
     }
   }

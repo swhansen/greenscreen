@@ -1,10 +1,16 @@
-# Javascript Green Screen  #
+# Javascript Green Screen Processing to video output  #
 
-Experimental code to take a live video stream with getUserMedia, grab images and
-process green screen(replacing green with background image), recapture
-as video to stream with webRTC
+Experimental code to take a live video stream with getUserMedia, grab still images,
+do green screen processing with a background image and recapture as video output stream.
+
+Uses core HTML canvas functions
 
 * getUserMedia
 * putImageData
 * getImageData
 * [captureStream](https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/captureStream)
+* video capture with  getUserMedia
+
+## Repository:
+
+    https://github.com/swhansen/greenscreen.git
