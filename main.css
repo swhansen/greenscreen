@@ -8,5 +8,5 @@ video, canvas {
 }
 
 canvas {
-  background: url(bb.jpg) no-repeat;
+  background: url(./bb.jpg) no-repeat;
 }
