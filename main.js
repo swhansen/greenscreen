@@ -2,6 +2,8 @@
 
   var video, outputVideo, scratchContext, scratchCanvas, frame, backgroundData;
 
+  var inputStream;
+
   function initialize() {
 
   // The source video.
@@ -13,8 +15,8 @@
 
     var backgroundCanvas = doc.getElementById( 'backcanvas' );
     var backgroundContext = backgroundCanvas.getContext( '2d' );
-    var img = document.getElementById( 'bb' );
-    backgroundContext.drawImage( img, 300, 300, 1000, 1000, 0, 0, 1000, 1000 );
+    var replaceImg = document.getElementById( 'bb' );
+    backgroundContext.drawImage( replaceImg, 300, 300, 1000, 1000, 0, 0, 1000, 1000 );
     backgroundData = backgroundContext.getImageData( 0, 0, 820, 640 ).data;
 
   // The working canvas.
@@ -27,17 +29,22 @@
                        navigator.mozGetUserMedia ||
                        navigator.msGetUserMedia );
 
-    // Get the webcam's stream.
+    // Get the webcam's stream using promises
 
-    nav.getUserMedia( { video: true }, startStream, function() {} );
+  var inputStream = navigator.mediaDevices.getUserMedia( { video: true  } );
+
+  inputStream.then(function( mediaStream ) {
+    video.src = window.URL.createObjectURL( mediaStream );
+    video.onloadedmetadata = function( e ) {
+    startStream( mediaStream );
+    };
+  } );
+    inputStream.catch(function(err) { console.log(err.name); });
   }
 
   function startStream( stream ) {
-    video.src = URL.createObjectURL( stream );
     video.play();
-
     createGreenStream();
-
     requestAnimationFrame( drawCanvasFrame );
   }
 
@@ -87,11 +94,11 @@
       var hsl = rgb2hsl( frame.data[j], frame.data[j + 1], frame.data[j + 2] );
       var h = hsl[0], s = hsl[1], l = hsl[2];
 
-    // ... and check if we have a somewhat green background
+    // ...check if we have a somewhat green background
 
       if ( h >= 90 && h <= 160 && s >= 25 && s <= 90 && l >= 20 && l <= 75 ) {
 
-      //.. and replace with the background pixels
+      // ... and replace with the background pixels
 
       frame.data[j] = backgroundData[ j ];
       frame.data[j + 1] = backgroundData[ j + 1 ];
